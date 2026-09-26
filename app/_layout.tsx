@@ -1,8 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Stack } from 'expo-router';
 import { PaperProvider } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 import { theme } from '../constants/theme';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from 'expo-font';
+
+SplashScreen.preventAutoHideAsync();
 import {
   setupNotificationChannel,
   requestAlarmPermissions,
@@ -13,6 +18,16 @@ import { setupForegroundHandler } from '../services/notifeeHandler';
 import { getUpcomingTasks } from '../services/database';
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    ...MaterialCommunityIcons.font,
+  });
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
   useEffect(() => {
     async function init() {
       console.log('[App] Initializing...');
@@ -36,6 +51,10 @@ export default function RootLayout() {
       if (unsubscribe) unsubscribe();
     };
   }, []);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <PaperProvider theme={theme}>
