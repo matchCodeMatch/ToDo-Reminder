@@ -9,7 +9,8 @@
     "scheme": "reminder-app",
     "plugins": [
       "expo-router",
-      "expo-sqlite"
+      "expo-sqlite",
+      "./plugins/withNotifee"
     ],
     "android": {
       "adaptiveIcon": {
